@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="pt-br">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Login</title>
+  <style>
+    /* Centraliza a caixa na tela */
+    body {
+      margin: 0;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: #f0f2f5;
+      font-family: Arial, sans-serif;
+    }
+
+    /* Caixa do login */
+    .login-box {
+      background: #fff;
+      padding: 30px 25px;
+      border-radius: 10px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      width: 320px;
+      text-align: center;
+    }
+
+    /* Título */
+    .login-box h2 {
+      margin-bottom: 20px;
+      color: #333;
+    }
+
+    /* Agrupamento dos inputs */
+    .input-group {
+      margin-bottom: 15px;
+      text-align: left;
+    }
+
+    .input-group label {
+      display: block;
+      margin-bottom: 5px;
+      font-size: 14px;
+      color: #555;
+    }
+
+    .input-group input {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 14px;
+    }
+
+    .input-group input:focus {
+      border-color: #4a90e2;
+      outline: none;
+    }
+
+    /* Botão */
+    button {
+      width: 100%;
+      padding: 10px;
+      background: #4a90e2;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      font-size: 15px;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    button:hover {
+      background: #357abd;
+    }
+  </style>
+</head>
+<body>
+  <div class="login-box">
+    <h2>Login</h2>
+    <form id="login-form" action="#" method="post">
+        <p id="resposta" style="margin-top:10px;color:red;"></p>
+      <div class="input-group">
+        <label for="usuario">Usuário</label>
+        <input type="text" id="usuario" name="usuario" placeholder="Digite seu usuário" required />
+      </div>
+
+      <div class="input-group">
+        <label for="senha">Senha</label>
+        <input type="password" id="senha" name="senha" placeholder="Digite sua senha" required />
+      </div>
+
+      <button type="submit">Entrar</button>
+    </form>
+  </div>
+   <script>
+document.getElementById("login-form").addEventListener("submit", async (e) => {
+  e.preventDefault();
+
+  const usuario = document.getElementById("usuario").value;
+  const senha = document.getElementById("senha").value;
+
+  try {
+    const resposta = await fetch("/login", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ usuario, senha })
+    });
+
+    if (resposta.ok) {
+  const data = await resposta.json();
+  window.location.href = data.redirect;
+} else {
+  const texto = await resposta.text();
+  document.getElementById("resposta").innerText = texto;
+}
+  } catch (err) {
+    console.error(err);
+    document.getElementById("resposta").innerText = "Erro na conexão com o servidor.";
+  }
+});
+</script>
+
+</body>
+</html>
